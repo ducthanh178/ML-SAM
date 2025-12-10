@@ -1,0 +1,25 @@
+# Modern dependencies for SAM project
+# Using latest stable versions to avoid conflicts
+
+# Core ML libraries
+jax>=0.4.0
+jaxlib>=0.4.0
+flax>=0.7.0
+optax>=0.1.0
+
+# TensorFlow for data loading (compat v2)
+tensorflow>=2.13.0
+tensorflow-datasets>=4.9.0
+tensorflow-probability>=0.20.0
+
+# Utilities
+absl-py>=1.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+matplotlib>=3.7.0
+tqdm>=4.65.0
+Pillow>=10.0.0
+
+# Optional but recommended
+tensorboard>=2.13.0
+
