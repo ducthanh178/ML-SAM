@@ -19,8 +19,9 @@ based on pre-computed results from CIFAR-10 and CIFAR-100 experiments.
 - 🎯 **Prediction Stability**: Confidence distributions and stability
 - 📉 **Generalization Gap**: Train vs test accuracy comparison
 - 🏔️ **Loss Landscape**: 3D visualization of loss surfaces
+- ✍️ **Digit Recognition**: Interactive MNIST digit recognition với SAM vs SGD comparison
 
-All data is loaded from local files (JSON, NPY) - no training is performed.
+All data is loaded from local files (JSON, NPY) - no training is performed. For digit recognition, models need to be trained first (see `scripts/TRAIN_MNIST.md`).
 """)
 
 st.markdown("---")

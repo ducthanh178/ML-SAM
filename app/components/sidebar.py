@@ -9,7 +9,7 @@ def render_sidebar():
     # Dataset selector
     dataset = st.sidebar.selectbox(
         "📊 Dataset",
-        options=["CIFAR-10", "CIFAR-100"],
+        options=["CIFAR-10", "CIFAR-100", "MNIST"],
         index=0,
         help="Chọn dataset để xem kết quả so sánh"
     )

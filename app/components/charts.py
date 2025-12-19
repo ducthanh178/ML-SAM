@@ -442,6 +442,102 @@ def plot_loss_landscape(loss_surface: np.ndarray, title: str = "Loss Landscape")
     return fig
 
 
+def plot_digit_prediction_comparison(pred_sam: dict, pred_sgd: dict):
+    """
+    So sánh predictions của SAM và SGD cho digit recognition.
+    
+    Args:
+        pred_sam: dict với 'prediction', 'confidence', 'all_probs'
+        pred_sgd: dict với 'prediction', 'confidence', 'all_probs'
+    
+    Returns:
+        Plotly figure
+    """
+    from plotly.subplots import make_subplots
+    
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=("SGD Confidence Distribution", "SAM Confidence Distribution"),
+        specs=[[{"type": "bar"}, {"type": "bar"}]]
+    )
+    
+    # SGD probabilities
+    fig.add_trace(
+        go.Bar(
+            x=list(range(10)),
+            y=pred_sgd['all_probs'],
+            marker_color=["#FF6B6B" if i == pred_sgd['prediction'] else "#FF9999" for i in range(10)],
+            name="SGD",
+            showlegend=False,
+            text=[f"{p:.3f}" for p in pred_sgd['all_probs']],
+            textposition="outside"
+        ),
+        row=1, col=1
+    )
+    
+    # SAM probabilities
+    fig.add_trace(
+        go.Bar(
+            x=list(range(10)),
+            y=pred_sam['all_probs'],
+            marker_color=["#4ECDC4" if i == pred_sam['prediction'] else "#95E5DF" for i in range(10)],
+            name="SAM",
+            showlegend=False,
+            text=[f"{p:.3f}" for p in pred_sam['all_probs']],
+            textposition="outside"
+        ),
+        row=1, col=2
+    )
+    
+    fig.update_xaxes(title_text="Digit", tickvals=list(range(10)), row=1, col=1)
+    fig.update_xaxes(title_text="Digit", tickvals=list(range(10)), row=1, col=2)
+    fig.update_yaxes(title_text="Probability", range=[0, 1], row=1, col=1)
+    fig.update_yaxes(title_text="Probability", range=[0, 1], row=1, col=2)
+    
+    fig.update_layout(
+        height=500,
+        title_text="SAM vs SGD: Digit Prediction Comparison",
+        title_x=0.5,
+        hovermode="x unified"
+    )
+    
+    return fig
+
+
+def plot_confidence_comparison_bars(pred_sam: dict, pred_sgd: dict):
+    """
+    So sánh confidence scores của SAM và SGD.
+    """
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        name="SGD",
+        x=["Confidence"],
+        y=[pred_sgd['confidence']],
+        marker_color="#FF6B6B",
+        text=f"{pred_sgd['confidence']:.4f}",
+        textposition="outside"
+    ))
+    
+    fig.add_trace(go.Bar(
+        name="SAM",
+        x=["Confidence"],
+        y=[pred_sam['confidence']],
+        marker_color="#4ECDC4",
+        text=f"{pred_sam['confidence']:.4f}",
+        textposition="outside"
+    ))
+    
+    fig.update_layout(
+        title="Confidence Score Comparison",
+        title_x=0.5,
+        yaxis_title="Confidence",
+        yaxis_range=[0, 1],
+        height=400,
+        barmode="group"
+    )
+    
+    return fig
 
 
 
