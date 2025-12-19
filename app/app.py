@@ -1,27 +1,28 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="SAM vs SGD Comparison",
+    page_title="So Sánh SAM vs SGD",
     page_icon="🔬",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-st.title("🔬 SAM vs SGD: Visual Comparison Demo")
+st.title("🔬 SAM vs SGD: Demo So Sánh Trực Quan")
 st.markdown("""
 ### Sharpness-Aware Minimization vs Stochastic Gradient Descent
 
-This interactive demo compares **SAM** (Sharpness-Aware Minimization) and **SGD** optimizers
-based on pre-computed results from CIFAR-10 and CIFAR-100 experiments.
+Demo tương tác này so sánh các optimizer **SAM** (Sharpness-Aware Minimization) và **SGD** 
+dựa trên kết quả đã tính toán trước từ các thí nghiệm CIFAR-10 và CIFAR-100.
 
-**Navigate using the sidebar** to explore different aspects of the comparison:
-- 📊 **Overview**: Final accuracy and training curves
-- 🎯 **Prediction Stability**: Confidence distributions and stability
-- 📉 **Generalization Gap**: Train vs test accuracy comparison
-- 🏔️ **Loss Landscape**: 3D visualization of loss surfaces
-- ✍️ **Digit Recognition**: Interactive MNIST digit recognition với SAM vs SGD comparison
+**Sử dụng sidebar** để khám phá các khía cạnh khác nhau của so sánh:
+- 📊 **Tổng Quan**: Độ chính xác cuối cùng và đường cong training
+- 🎯 **Độ Ổn Định Dự Đoán**: Phân phối confidence và độ ổn định
+- 📉 **Generalization Gap**: So sánh train vs test accuracy
+- 🏔️ **Loss Landscape**: Visualization 3D của loss surfaces
+- ✍️ **Nhận Diện Chữ Số**: Nhận diện chữ số MNIST tương tác với so sánh SAM vs SGD
 
-All data is loaded from local files (JSON, NPY) - no training is performed. For digit recognition, models need to be trained first (see `scripts/TRAIN_MNIST.md`).
+Tất cả dữ liệu được tải từ các file local (JSON, NPY) - không thực hiện training. 
+Đối với nhận diện chữ số, cần train models trước (xem `scripts/TRAIN_MNIST.md`).
 """)
 
 st.markdown("---")
@@ -40,9 +41,9 @@ try:
                 st.metric("SGD Test Acc", f"{metrics_c10['SGD']['test_accuracy']:.3f}")
                 st.metric("SAM Test Acc", f"{metrics_c10['SAM']['test_accuracy']:.3f}")
             else:
-                st.info("No data available")
+                st.info("Chưa có dữ liệu")
         except:
-            st.info("No data available")
+            st.info("Chưa có dữ liệu")
     
     with col2:
         st.subheader("CIFAR-100")
@@ -52,17 +53,17 @@ try:
                 st.metric("SGD Test Acc", f"{metrics_c100['SGD']['test_accuracy']:.3f}")
                 st.metric("SAM Test Acc", f"{metrics_c100['SAM']['test_accuracy']:.3f}")
             else:
-                st.info("No data available")
+                st.info("Chưa có dữ liệu")
         except:
-            st.info("No data available")
+            st.info("Chưa có dữ liệu")
 except:
     pass
 
 st.markdown("---")
 
 st.info("""
-💡 **Tip**: Use the sidebar to select different datasets and optimizers. 
-The visualizations will update automatically to show the differences between SAM and SGD.
+💡 **Mẹo**: Sử dụng sidebar để chọn các dataset và optimizer khác nhau. 
+Các visualization sẽ tự động cập nhật để hiển thị sự khác biệt giữa SAM và SGD.
 """)
 
 

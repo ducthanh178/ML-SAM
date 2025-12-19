@@ -3,7 +3,7 @@ from components.sidebar import render_sidebar
 from components.loaders import load_all_metrics
 from components.charts import plot_generalization_gap, plot_training_curves
 
-st.set_page_config(page_title="Generalization Gap", page_icon="📉", layout="wide")
+st.set_page_config(page_title="Khoảng Cách Generalization", page_icon="📉", layout="wide")
 
 # Sidebar
 dataset, optimizer, checkpoint = render_sidebar()
@@ -12,14 +12,14 @@ dataset, optimizer, checkpoint = render_sidebar()
 st.title("📉 Generalization Gap")
 
 st.markdown("""
-### Understanding Overfitting
+### Hiểu Về Overfitting
 
-The **generalization gap** is the difference between training and test accuracy:
-- **Large gap**: Model overfits to training data
-- **Small gap**: Model generalizes well to unseen data
+**Generalization gap** là sự khác biệt giữa accuracy training và test:
+- **Gap lớn**: Model overfit với dữ liệu training
+- **Gap nhỏ**: Model generalize tốt với dữ liệu chưa thấy
 
-**SGD** often shows a larger generalization gap, indicating overfitting.
-**SAM** typically reduces this gap by finding flatter minima that generalize better.
+**SGD** thường cho thấy generalization gap lớn hơn, cho thấy overfitting.
+**SAM** thường giảm gap này bằng cách tìm các minima phẳng hơn để generalize tốt hơn.
 """)
 
 st.markdown("---")
@@ -28,11 +28,11 @@ st.markdown("---")
 metrics = load_all_metrics(dataset)
 
 if metrics["SGD"].get("test_accuracy", 0) == 0 and metrics["SAM"].get("test_accuracy", 0) == 0:
-    st.warning("⚠️ No data available. Please ensure metrics.json files are populated with results.")
+    st.warning("⚠️ Chưa có dữ liệu. Vui lòng đảm bảo các file metrics.json đã được điền kết quả.")
 else:
     # Generalization gap visualization
-    st.header("🎯 Train vs Test Accuracy Comparison")
-    st.markdown("Visualize the generalization gap for both optimizers:")
+    st.header("🎯 So Sánh Train vs Test Accuracy")
+    st.markdown("Visualize khoảng cách generalization cho cả 2 optimizers:")
     
     fig_gap = plot_generalization_gap(metrics["SGD"], metrics["SAM"])
     st.plotly_chart(fig_gap, use_container_width=True)
@@ -65,7 +65,7 @@ else:
     st.markdown("---")
     
     # Gap comparison
-    st.header("📊 Generalization Gap Analysis")
+    st.header("📊 Phân Tích Generalization Gap")
     
     col1, col2, col3 = st.columns(3)
     
@@ -75,14 +75,14 @@ else:
             f"{gap_sgd:.3f}",
             delta=f"{gap_sgd:.3f}",
             delta_color="inverse",
-            help="Difference between train and test accuracy"
+            help="Khác biệt giữa train và test accuracy"
         )
         if gap_sgd > 0.1:
-            st.error("⚠️ Large gap indicates overfitting")
+            st.error("⚠️ Gap lớn cho thấy overfitting")
         elif gap_sgd > 0.05:
-            st.warning("⚠️ Moderate gap")
+            st.warning("⚠️ Gap vừa phải")
         else:
-            st.success("✅ Small gap")
+            st.success("✅ Gap nhỏ")
     
     with col2:
         st.metric(
@@ -90,14 +90,14 @@ else:
             f"{gap_sam:.3f}",
             delta=f"{gap_sam:.3f}",
             delta_color="inverse",
-            help="Difference between train and test accuracy"
+            help="Khác biệt giữa train và test accuracy"
         )
         if gap_sam > 0.1:
-            st.error("⚠️ Large gap indicates overfitting")
+            st.error("⚠️ Gap lớn cho thấy overfitting")
         elif gap_sam > 0.05:
-            st.warning("⚠️ Moderate gap")
+            st.warning("⚠️ Gap vừa phải")
         else:
-            st.success("✅ Small gap")
+            st.success("✅ Gap nhỏ")
     
     with col3:
         gap_reduction_pct = (gap_reduction / gap_sgd * 100) if gap_sgd > 0 else 0
@@ -105,18 +105,18 @@ else:
             "Gap Reduction",
             f"{gap_reduction:.3f}",
             delta=f"{gap_reduction_pct:.2f}%",
-            help="How much SAM reduces the gap compared to SGD"
+            help="SAM giảm gap bao nhiêu so với SGD"
         )
         if gap_reduction > 0:
-            st.success(f"✅ SAM reduces gap by {gap_reduction:.3f}")
+            st.success(f"✅ SAM giảm gap {gap_reduction:.3f}")
         else:
-            st.info("📊 Compare the gaps above")
+            st.info("📊 So sánh các gap ở trên")
     
     st.markdown("---")
     
     # Training curves with gap visualization
-    st.header("📈 Training Progress: Gap Evolution")
-    st.markdown("Observe how the generalization gap evolves during training:")
+    st.header("📈 Tiến Trình Training: Sự Tiến Hóa của Generalization Gap")
+    st.markdown("Quan sát cách generalization gap thay đổi trong quá trình training:")
     
     # Calculate gap per epoch if available
     train_accs_sgd = metrics["SGD"].get("train_accuracy", [])
@@ -155,7 +155,7 @@ else:
         ))
         
         fig_gaps.update_layout(
-            title="Generalization Gap Over Training",
+            title="Generalization Gap Trong Quá Trình Training",
             title_x=0.5,
             xaxis_title="Epoch",
             yaxis_title="Gap (Train - Val Accuracy)",
@@ -168,24 +168,24 @@ else:
     st.markdown("---")
     
     # Key insights
-    st.header("💡 Key Insights")
+    st.header("💡 Điểm Quan Trọng")
     
     if gap_reduction > 0:
         st.success(f"""
-        ✅ **SAM reduces the generalization gap by {gap_reduction:.3f}** ({gap_reduction_pct:.2f}%)
+        ✅ **SAM giảm generalization gap {gap_reduction:.3f}** ({gap_reduction_pct:.2f}%)
         
-        This indicates that SAM finds solutions that generalize better to unseen data,
-        reducing overfitting compared to SGD.
+        Điều này cho thấy SAM tìm được các nghiệm generalize tốt hơn với dữ liệu chưa thấy,
+        giảm overfitting so với SGD.
         """)
     else:
-        st.info("📊 Compare the generalization gaps above to see the differences between SGD and SAM.")
+        st.info("📊 So sánh các generalization gap ở trên để xem sự khác biệt giữa SGD và SAM.")
     
     if gap_sgd > gap_sam:
         st.info(f"""
-        📊 **SGD shows {gap_sgd - gap_sam:.3f} larger gap** than SAM.
+        📊 **SGD có gap lớn hơn {gap_sgd - gap_sam:.3f}** so với SAM.
         
-        This suggests that SGD is more prone to overfitting, memorizing training data
-        rather than learning generalizable patterns.
+        Điều này cho thấy SGD dễ bị overfitting hơn, ghi nhớ dữ liệu training
+        thay vì học các pattern có thể generalize.
         """)
 
 

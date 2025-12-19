@@ -13,13 +13,13 @@ dataset, optimizer, checkpoint = render_sidebar()
 st.title("🏔️ Loss Landscape")
 
 st.markdown("""
-### Understanding Sharp vs Flat Minima
+### Hiểu Về Sharp vs Flat Minima
 
-The **loss landscape** visualizes the shape of the loss function around the solution:
-- **Sharp minima**: Steep valleys that are sensitive to perturbations
-- **Flat minima**: Wide, shallow valleys that are more robust
+**Loss landscape** visualize hình dạng của loss function xung quanh nghiệm:
+- **Sharp minima**: Các thung lũng dốc, nhạy cảm với các nhiễu
+- **Flat minima**: Các thung lũng rộng, nông, ổn định hơn
 
-**SGD** typically finds sharp minima, while **SAM** seeks flatter minima that generalize better.
+**SGD** thường tìm thấy sharp minima, trong khi **SAM** tìm các minima phẳng hơn để generalize tốt hơn.
 """)
 
 st.markdown("---")
@@ -29,7 +29,7 @@ loss_surface_sgd = load_loss_surface(dataset, "SGD")
 loss_surface_sam = load_loss_surface(dataset, "SAM")
 
 if loss_surface_sgd.size == 0 and loss_surface_sam.size == 0:
-    st.warning("⚠️ No loss surface data available. Please ensure loss_surface.npy files exist in the experiments directory.")
+    st.warning("⚠️ Chưa có dữ liệu loss surface. Vui lòng đảm bảo các file loss_surface.npy tồn tại trong thư mục experiments.")
 else:
     # Display both landscapes side by side
     col1, col2 = st.columns(2)
@@ -42,7 +42,7 @@ else:
                 st.plotly_chart(fig_sgd, use_container_width=True)
             
             # Statistics
-            st.subheader("Statistics")
+            st.subheader("Thống Kê")
             st.metric("Min Loss", f"{np.min(loss_surface_sgd):.4f}")
             st.metric("Max Loss", f"{np.max(loss_surface_sgd):.4f}")
             st.metric("Mean Loss", f"{np.mean(loss_surface_sgd):.4f}")
@@ -52,7 +52,7 @@ else:
             sharpness_sgd = np.std(loss_surface_sgd)
             st.metric("Sharpness (std)", f"{sharpness_sgd:.4f}")
         else:
-            st.info("No data available for SGD")
+            st.info("Chưa có dữ liệu cho SGD")
     
     with col2:
         st.header("🔵 SAM Loss Landscape")
@@ -62,7 +62,7 @@ else:
                 st.plotly_chart(fig_sam, use_container_width=True)
             
             # Statistics
-            st.subheader("Statistics")
+            st.subheader("Thống Kê")
             st.metric("Min Loss", f"{np.min(loss_surface_sam):.4f}")
             st.metric("Max Loss", f"{np.max(loss_surface_sam):.4f}")
             st.metric("Mean Loss", f"{np.mean(loss_surface_sam):.4f}")
@@ -72,13 +72,13 @@ else:
             sharpness_sam = np.std(loss_surface_sam)
             st.metric("Sharpness (std)", f"{sharpness_sam:.4f}")
         else:
-            st.info("No data available for SAM")
+            st.info("Chưa có dữ liệu cho SAM")
     
     st.markdown("---")
     
     # Comparison
     if loss_surface_sgd.size > 0 and loss_surface_sam.size > 0:
-        st.header("📊 Comparison")
+        st.header("📊 So Sánh")
         
         col1, col2, col3 = st.columns(3)
         
@@ -89,7 +89,7 @@ else:
                 f"{sharpness_diff:.4f}",
                 delta=f"{sharpness_diff:.4f}",
                 delta_color="inverse" if sharpness_diff > 0 else "normal",
-                help="Lower sharpness indicates flatter minima"
+                help="Sharpness thấp hơn cho thấy minima phẳng hơn"
             )
         
         with col2:
@@ -98,7 +98,7 @@ else:
                 "Min Loss Difference",
                 f"{min_diff:.4f}",
                 delta=f"{min_diff:.4f}",
-                help="Difference in minimum loss values"
+                help="Khác biệt trong giá trị loss tối thiểu"
             )
         
         with col3:
@@ -109,7 +109,7 @@ else:
                 "Loss Range Difference",
                 f"{range_diff:.4f}",
                 delta=f"{range_diff:.4f}",
-                help="Difference in loss value ranges"
+                help="Khác biệt trong phạm vi giá trị loss"
             )
         
         st.markdown("---")
@@ -117,7 +117,7 @@ else:
         # Visual comparison with side-by-side 2D slices if 3D
         if loss_surface_sgd.ndim >= 2 and loss_surface_sam.ndim >= 2:
             st.header("🔍 2D Slice Comparison")
-            st.markdown("Compare 2D slices through the loss landscape:")
+            st.markdown("So sánh các 2D slices qua loss landscape:")
             
             # Take middle slice
             if loss_surface_sgd.ndim == 2:
@@ -169,23 +169,23 @@ else:
         st.markdown("---")
         
         # Key insights
-        st.header("💡 Key Insights")
+        st.header("💡 Điểm Quan Trọng")
         
         if sharpness_sam < sharpness_sgd:
             st.success(f"""
-            ✅ **SAM finds flatter minima** (sharpness: {sharpness_sam:.4f} vs {sharpness_sgd:.4f})
+            ✅ **SAM tìm thấy flatter minima** (sharpness: {sharpness_sam:.4f} vs {sharpness_sgd:.4f})
             
-            Flatter minima are more robust to perturbations and generalize better to unseen data.
-            This is the core principle behind SAM's improved performance.
+            Flatter minima ổn định hơn với các nhiễu và generalize tốt hơn với dữ liệu chưa thấy.
+            Đây là nguyên lý cốt lõi đằng sau improved performance của SAM.
             """)
         else:
-            st.info("📊 Compare the sharpness metrics above to see the differences in loss landscape geometry.")
+            st.info("📊 So sánh các sharpness metrics ở trên để xem sự khác biệt trong loss landscape geometry.")
         
         st.info("""
-        📚 **Understanding the Visualization:**
-        - **Steep valleys** (high sharpness) = Sharp minima = Poor generalization
-        - **Wide valleys** (low sharpness) = Flat minima = Better generalization
-        - SAM explicitly optimizes for flatter minima, leading to better test performance
+        📚 **Hiểu Về Visualization:**
+        - **Steep valleys** (sharpness cao) = Sharp minima = Poor generalization
+        - **Wide valleys** (sharpness thấp) = Flat minima = Better generalization
+        - SAM explicitly optimizes cho flatter minima, dẫn đến better test performance
         """)
 
 

@@ -4,22 +4,22 @@ from components.sidebar import render_sidebar
 from components.loaders import load_all_predictions
 from components.charts import plot_confidence_comparison, plot_confidence_stability
 
-st.set_page_config(page_title="Prediction Stability", page_icon="🎯", layout="wide")
+st.set_page_config(page_title="Độ Ổn Định Dự Đoán", page_icon="🎯", layout="wide")
 
 # Sidebar
 dataset, optimizer, checkpoint = render_sidebar()
 
 # Main content
-st.title("🎯 Prediction Stability")
+st.title("🎯 Độ Ổn Định Dự Đoán")
 
 st.markdown("""
-### Understanding Prediction Confidence
+### Hiểu Về Prediction Confidence
 
-This page visualizes how **SGD** and **SAM** differ in their prediction confidence:
-- **SGD**: Often produces overconfident predictions with sharp confidence distributions
-- **SAM**: Tends to have more stable and calibrated confidence scores
+Trang này hiển thị cách **SGD** và **SAM** khác nhau về prediction confidence:
+- **SGD**: Thường tạo ra các dự đoán overconfident với phân phối confidence sắc nét
+- **SAM**: Có xu hướng có confidence scores ổn định và được calibrated tốt hơn
 
-Compare the confidence distributions and stability across multiple samples.
+So sánh phân phối confidence và độ ổn định trên nhiều mẫu.
 """)
 
 st.markdown("---")
@@ -28,24 +28,24 @@ st.markdown("---")
 predictions = load_all_predictions(dataset)
 
 if not predictions["SGD"].get("confidences") or not predictions["SAM"].get("confidences"):
-    st.warning("⚠️ No prediction data available. Please ensure predictions.json files are populated.")
+    st.warning("⚠️ Chưa có dữ liệu dự đoán. Vui lòng đảm bảo các file predictions.json đã được điền.")
 else:
     # Sample selector
     num_samples = len(predictions["SGD"].get("confidences", []))
     if num_samples > 0:
         sample_idx = st.slider(
-            "Select Sample Index",
+            "Chọn Chỉ Số Mẫu",
             min_value=0,
             max_value=num_samples - 1,
             value=0,
-            help="Choose which sample to visualize"
+            help="Chọn mẫu nào để visualize"
         )
         
         st.markdown("---")
         
         # Confidence comparison for selected sample
-        st.header("📊 Prediction Confidence Comparison")
-        st.markdown(f"Comparing confidence distributions for sample {sample_idx}:")
+        st.header("📊 So Sánh Prediction Confidence")
+        st.markdown(f"So sánh phân phối confidence cho mẫu {sample_idx}:")
         
         fig_confidence = plot_confidence_comparison(
             predictions["SGD"], 
@@ -60,7 +60,7 @@ else:
             col1, col2 = st.columns(2)
             
             with col1:
-                st.subheader("SGD Prediction")
+                st.subheader("Dự Đoán SGD")
                 conf_sgd = predictions["SGD"]["confidences"][sample_idx]
                 pred_sgd = predictions["SGD"].get("predictions", [0])[sample_idx] if predictions["SGD"].get("predictions") else 0
                 true_label = predictions["SGD"].get("true_labels", [0])[sample_idx] if predictions["SGD"].get("true_labels") else 0
@@ -75,10 +75,10 @@ else:
                 st.metric("Predicted Class", pred_class_sgd)
                 st.metric("True Class", true_label)
                 st.metric("Max Confidence", f"{max_conf_sgd:.3f}")
-                st.metric("Correct", "✅" if pred_class_sgd == true_label else "❌")
+                st.metric("Đúng", "✅" if pred_class_sgd == true_label else "❌")
             
             with col2:
-                st.subheader("SAM Prediction")
+                st.subheader("Dự Đoán SAM")
                 conf_sam = predictions["SAM"]["confidences"][sample_idx]
                 pred_sam = predictions["SAM"].get("predictions", [0])[sample_idx] if predictions["SAM"].get("predictions") else 0
                 
@@ -92,20 +92,20 @@ else:
                 st.metric("Predicted Class", pred_class_sam)
                 st.metric("True Class", true_label)
                 st.metric("Max Confidence", f"{max_conf_sam:.3f}")
-                st.metric("Correct", "✅" if pred_class_sam == true_label else "❌")
+                st.metric("Đúng", "✅" if pred_class_sam == true_label else "❌")
         
         st.markdown("---")
         
         # Confidence stability
         st.header("📈 Confidence Stability Across Samples")
-        st.markdown("Compare how confidence varies across multiple samples:")
+        st.markdown("So sánh cách confidence thay đổi trên nhiều samples:")
         
         num_samples_plot = st.slider(
-            "Number of Samples to Display",
+            "Số Samples Hiển Thị",
             min_value=10,
             max_value=min(100, num_samples),
             value=min(20, num_samples),
-            help="Select how many samples to include in the stability plot"
+            help="Chọn số samples để hiển thị trong biểu đồ stability"
         )
         
         fig_stability = plot_confidence_stability(
@@ -129,22 +129,22 @@ else:
             col1, col2, col3 = st.columns(3)
             
             with col1:
-                st.metric("SGD Mean Confidence", f"{np.mean(max_conf_sgd):.3f}")
-                st.metric("SGD Std Confidence", f"{np.std(max_conf_sgd):.3f}")
+        st.metric("SGD Mean Confidence", f"{np.mean(max_conf_sgd):.3f}")
+        st.metric("SGD Std Confidence", f"{np.std(max_conf_sgd):.3f}")
+    
+    with col2:
+        st.metric("SAM Mean Confidence", f"{np.mean(max_conf_sam):.3f}")
+        st.metric("SAM Std Confidence", f"{np.std(max_conf_sam):.3f}")
+    
+    with col3:
+        mean_diff = np.mean(max_conf_sam) - np.mean(max_conf_sgd)
+        std_diff = np.std(max_conf_sam) - np.std(max_conf_sgd)
+        st.metric("Mean Difference", f"{mean_diff:.3f}")
+        st.metric("Std Difference", f"{std_diff:.3f}", 
+                 delta=f"{std_diff:.3f}" if std_diff < 0 else None,
+                 delta_color="inverse")
             
-            with col2:
-                st.metric("SAM Mean Confidence", f"{np.mean(max_conf_sam):.3f}")
-                st.metric("SAM Std Confidence", f"{np.std(max_conf_sam):.3f}")
-            
-            with col3:
-                mean_diff = np.mean(max_conf_sam) - np.mean(max_conf_sgd)
-                std_diff = np.std(max_conf_sam) - np.std(max_conf_sgd)
-                st.metric("Mean Difference", f"{mean_diff:.3f}")
-                st.metric("Std Difference", f"{std_diff:.3f}", 
-                         delta=f"{std_diff:.3f}" if std_diff < 0 else None,
-                         delta_color="inverse")
-            
-            st.info("💡 **Lower standard deviation indicates more stable predictions.** SAM typically shows lower variance in confidence scores.")
+            st.info("💡 **Standard deviation thấp hơn cho thấy predictions ổn định hơn.** SAM thường có variance thấp hơn trong confidence scores.")
 
 
 

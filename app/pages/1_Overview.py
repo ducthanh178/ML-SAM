@@ -3,26 +3,26 @@ from components.sidebar import render_sidebar
 from components.loaders import load_all_metrics
 from components.charts import plot_accuracy_comparison, plot_training_curves
 
-st.set_page_config(page_title="Overview", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Tổng Quan", page_icon="📊", layout="wide")
 
 # Sidebar
 dataset, optimizer, checkpoint = render_sidebar()
 
 # Main content
-st.title("📊 Overview: SAM vs SGD")
+st.title("📊 Tổng Quan: SAM vs SGD")
 
 st.markdown("""
-### Problem: Generalization and Stability
+### Vấn Đề: Generalization và Độ Ổn Định
 
-Deep learning models often suffer from:
-- **Overfitting**: High training accuracy but poor test performance
-- **Sharp minima**: Solutions that are sensitive to small perturbations
-- **Poor generalization**: Large gap between train and test accuracy
+Các mô hình deep learning thường gặp phải:
+- **Overfitting**: Accuracy training cao nhưng hiệu suất test kém
+- **Sharp minima**: Các nghiệm nhạy cảm với các nhiễu nhỏ
+- **Generalization kém**: Khoảng cách lớn giữa accuracy train và test
 
-**SAM (Sharpness-Aware Minimization)** addresses these issues by:
-- Finding flatter minima that generalize better
-- Reducing the generalization gap
-- Improving test accuracy while maintaining train performance
+**SAM (Sharpness-Aware Minimization)** giải quyết các vấn đề này bằng cách:
+- Tìm các minima phẳng hơn để generalize tốt hơn
+- Giảm generalization gap
+- Cải thiện test accuracy trong khi vẫn duy trì train performance
 """)
 
 st.markdown("---")
@@ -31,11 +31,11 @@ st.markdown("---")
 metrics = load_all_metrics(dataset)
 
 if metrics["SGD"].get("test_accuracy", 0) == 0 and metrics["SAM"].get("test_accuracy", 0) == 0:
-    st.warning("⚠️ No data available. Please ensure metrics.json files are populated with results.")
+    st.warning("⚠️ Chưa có dữ liệu. Vui lòng đảm bảo các file metrics.json đã được điền kết quả.")
 else:
     # Final accuracy comparison
-    st.header("🎯 Final Accuracy Comparison")
-    st.markdown("Compare the final train and test accuracy of SGD vs SAM:")
+    st.header("🎯 So Sánh Accuracy Cuối Cùng")
+    st.markdown("So sánh train và test accuracy cuối cùng của SGD vs SAM:")
     
     fig_accuracy = plot_accuracy_comparison(metrics["SGD"], metrics["SAM"])
     st.plotly_chart(fig_accuracy, use_container_width=True)
@@ -72,25 +72,25 @@ else:
     st.markdown("---")
     
     # Training curves
-    st.header("📈 Training Curves")
-    st.markdown("Observe how loss and accuracy evolve during training:")
+    st.header("📈 Đường Cong Training")
+    st.markdown("Quan sát cách loss và accuracy thay đổi trong quá trình training:")
     
     fig_curves = plot_training_curves(metrics["SGD"], metrics["SAM"])
     st.plotly_chart(fig_curves, use_container_width=True)
     
     # Summary
     st.markdown("---")
-    st.header("💡 Key Takeaways")
+    st.header("💡 Điểm Quan Trọng")
     
     if test_acc_sam > test_acc_sgd:
-        st.success(f"✅ **SAM achieves {test_acc_sam - test_acc_sgd:.3f} higher test accuracy** than SGD")
+        st.success(f"✅ **SAM đạt test accuracy cao hơn {test_acc_sam - test_acc_sgd:.3f}** so với SGD")
     else:
-        st.info("📊 Compare the metrics above to see the differences")
+        st.info("📊 So sánh các metrics ở trên để xem sự khác biệt")
     
     if gap_sam < gap_sgd:
-        st.success(f"✅ **SAM reduces generalization gap by {gap_sgd - gap_sam:.3f}** compared to SGD")
+        st.success(f"✅ **SAM giảm generalization gap {gap_sgd - gap_sam:.3f}** so với SGD")
     else:
-        st.info("📊 Check the generalization gap metrics above")
+        st.info("📊 Kiểm tra các metrics generalization gap ở trên")
 
 
 

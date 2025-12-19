@@ -249,14 +249,14 @@ if image_tensor is not None:
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown("#### 🔴 SGD Characteristics")
+                st.markdown("#### 🔴 Đặc Điểm SGD")
                 st.markdown(f"""
-                - **Predicted digit**: {pred_sgd['prediction']}
+                - **Chữ số dự đoán**: {pred_sgd['prediction']}
                 - **Confidence**: {pred_sgd['confidence']:.4f}
-                - **Top 3 predictions**:
-                  1. Digit {np.argsort(pred_sgd['all_probs'])[-1]}: {sorted(pred_sgd['all_probs'])[-1]:.4f}
-                  2. Digit {np.argsort(pred_sgd['all_probs'])[-2]}: {sorted(pred_sgd['all_probs'])[-2]:.4f}
-                  3. Digit {np.argsort(pred_sgd['all_probs'])[-3]}: {sorted(pred_sgd['all_probs'])[-3]:.4f}
+                - **Top 3 dự đoán**:
+                  1. Chữ số {np.argsort(pred_sgd['all_probs'])[-1]}: {sorted(pred_sgd['all_probs'])[-1]:.4f}
+                  2. Chữ số {np.argsort(pred_sgd['all_probs'])[-2]}: {sorted(pred_sgd['all_probs'])[-2]:.4f}
+                  3. Chữ số {np.argsort(pred_sgd['all_probs'])[-3]}: {sorted(pred_sgd['all_probs'])[-3]:.4f}
                 """)
                 
                 # Check if overconfident (very high confidence on wrong prediction)
@@ -265,14 +265,14 @@ if image_tensor is not None:
                     st.warning("⚠️ SGD có confidence rất cao - có thể là overconfident.")
             
             with col2:
-                st.markdown("#### 🔵 SAM Characteristics")
+                st.markdown("#### 🔵 Đặc Điểm SAM")
                 st.markdown(f"""
-                - **Predicted digit**: {pred_sam['prediction']}
+                - **Chữ số dự đoán**: {pred_sam['prediction']}
                 - **Confidence**: {pred_sam['confidence']:.4f}
-                - **Top 3 predictions**:
-                  1. Digit {np.argsort(pred_sam['all_probs'])[-1]}: {sorted(pred_sam['all_probs'])[-1]:.4f}
-                  2. Digit {np.argsort(pred_sam['all_probs'])[-2]}: {sorted(pred_sam['all_probs'])[-2]:.4f}
-                  3. Digit {np.argsort(pred_sam['all_probs'])[-3]}: {sorted(pred_sam['all_probs'])[-3]:.4f}
+                - **Top 3 dự đoán**:
+                  1. Chữ số {np.argsort(pred_sam['all_probs'])[-1]}: {sorted(pred_sam['all_probs'])[-1]:.4f}
+                  2. Chữ số {np.argsort(pred_sam['all_probs'])[-2]}: {sorted(pred_sam['all_probs'])[-2]:.4f}
+                  3. Chữ số {np.argsort(pred_sam['all_probs'])[-3]}: {sorted(pred_sam['all_probs'])[-3]:.4f}
                 """)
                 
                 # Check calibration
@@ -282,7 +282,7 @@ if image_tensor is not None:
             st.markdown("---")
             
             # Key takeaways
-            st.header("💡 Key Insights: SAM vs SGD")
+            st.header("💡 Điểm Quan Trọng: SAM vs SGD")
             
             if pred_sam['prediction'] == pred_sgd['prediction']:
                 st.success(f"""

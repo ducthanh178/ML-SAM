@@ -28,7 +28,7 @@ def render_sidebar():
     
     # Checkpoint selector (optional, có thể để empty hoặc None)
     checkpoint = st.sidebar.text_input(
-        "📁 Checkpoint (Optional)",
+        "📁 Checkpoint (Tùy chọn)",
         value="",
         help="Nhập tên checkpoint nếu có (để trống nếu không dùng)"
     )
