@@ -21,8 +21,6 @@ dựa trên kết quả đã tính toán trước từ các thí nghiệm CIFAR-
 - 🏔️ **Loss Landscape**: Visualization 3D của loss surfaces
 - ✍️ **Nhận Diện Chữ Số**: Nhận diện chữ số MNIST tương tác với so sánh SAM vs SGD
 
-Tất cả dữ liệu được tải từ các file local (JSON, NPY) - không thực hiện training. 
-Đối với nhận diện chữ số, cần train models trước (xem `scripts/TRAIN_MNIST.md`).
 """)
 
 st.markdown("---")
@@ -60,11 +58,6 @@ except:
     pass
 
 st.markdown("---")
-
-st.info("""
-💡 **Mẹo**: Sử dụng sidebar để chọn các dataset và optimizer khác nhau. 
-Các visualization sẽ tự động cập nhật để hiển thị sự khác biệt giữa SAM và SGD.
-""")
 
 
 
