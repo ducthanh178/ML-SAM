@@ -129,20 +129,20 @@ else:
             col1, col2, col3 = st.columns(3)
             
             with col1:
-        st.metric("SGD Mean Confidence", f"{np.mean(max_conf_sgd):.3f}")
-        st.metric("SGD Std Confidence", f"{np.std(max_conf_sgd):.3f}")
-    
-    with col2:
-        st.metric("SAM Mean Confidence", f"{np.mean(max_conf_sam):.3f}")
-        st.metric("SAM Std Confidence", f"{np.std(max_conf_sam):.3f}")
-    
-    with col3:
-        mean_diff = np.mean(max_conf_sam) - np.mean(max_conf_sgd)
-        std_diff = np.std(max_conf_sam) - np.std(max_conf_sgd)
-        st.metric("Mean Difference", f"{mean_diff:.3f}")
-        st.metric("Std Difference", f"{std_diff:.3f}", 
-                 delta=f"{std_diff:.3f}" if std_diff < 0 else None,
-                 delta_color="inverse")
+                st.metric("SGD Mean Confidence", f"{np.mean(max_conf_sgd):.3f}")
+                st.metric("SGD Std Confidence", f"{np.std(max_conf_sgd):.3f}")
+            
+            with col2:
+                st.metric("SAM Mean Confidence", f"{np.mean(max_conf_sam):.3f}")
+                st.metric("SAM Std Confidence", f"{np.std(max_conf_sam):.3f}")
+            
+            with col3:
+                mean_diff = np.mean(max_conf_sam) - np.mean(max_conf_sgd)
+                std_diff = np.std(max_conf_sam) - np.std(max_conf_sgd)
+                st.metric("Mean Difference", f"{mean_diff:.3f}")
+                st.metric("Std Difference", f"{std_diff:.3f}", 
+                         delta=f"{std_diff:.3f}" if std_diff < 0 else None,
+                         delta_color="inverse")
             
             st.info("💡 **Standard deviation thấp hơn cho thấy predictions ổn định hơn.** SAM thường có variance thấp hơn trong confidence scores.")
 
