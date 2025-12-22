@@ -14,23 +14,23 @@ Hoặc cài từng package:
 pip install streamlit plotly numpy torch torchvision Pillow
 ```
 
-## Bước 2: Tạo Dữ Liệu Mẫu
+## Bước 2: Export Dữ Liệu Từ CSV (CIFAR-10 và CIFAR-100)
 
-### Tạo file JSON (metrics và predictions):
+Project sử dụng dữ liệu thật từ training trên Colab. Để export:
 
+1. **Đặt CSV files vào `data/logs/`** (từ notebooks training trên Colab)
+
+2. **Export sang JSON:**
 ```bash
-python scripts/create_all_data.py
+python scripts/export_metrics.py --csv-path data/logs/cifar10_sam.csv --dataset CIFAR-10 --optimizer SAM
+python scripts/export_metrics.py --csv-path data/logs/cifar10_sgd.csv --dataset CIFAR-10 --optimizer SGD
+python scripts/export_metrics.py --csv-path data/logs/cifar100_sam.csv --dataset CIFAR-100 --optimizer SAM
+python scripts/export_metrics.py --csv-path data/logs/cifar100_sgd.csv --dataset CIFAR-100 --optimizer SGD
 ```
 
-Script này chỉ cần Python standard library (json, math, os, pathlib) - không cần cài thêm gì.
-
-### Tạo file loss_surface.npy (tùy chọn):
-
-Để có visualization loss landscape, cần numpy (đã có trong requirements.txt):
-
-```bash
-python scripts/generate_sample_data.py
-```
+**Lưu ý:** 
+- Cần `pandas` để export: `pip install pandas`
+- MNIST giữ nguyên dữ liệu hiện tại (train local)
 
 ## Bước 3: Chạy Ứng Dụng
 

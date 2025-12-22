@@ -1,37 +1,30 @@
 # Hướng Dẫn Nhanh
 
-## Tạo Dữ Liệu Mẫu
+## Export Dữ Liệu Từ CSV (CIFAR-10 và CIFAR-100)
 
-Chạy script sau để tạo tất cả dữ liệu mẫu:
+Project sử dụng dữ liệu thật từ training trên Colab. Để export từ CSV logs:
 
+1. **Đặt CSV files vào `data/logs/`:**
+   - `cifar10_sam.csv` (hoặc `Log[WRN-28-10_CIFAR-10-SAM].csv`)
+   - `cifar10_sgd.csv` (hoặc `Log[WRN-28-10_CIFAR-10-SGD].csv`)
+   - `cifar100_sam.csv` (hoặc `Log[WRN-28-10_CIFAR-100-SAM].csv`)
+   - `cifar100_sgd.csv` (hoặc `Log[WRN-28-10_CIFAR-100-SGD].csv`)
+
+2. **Export sang JSON:**
 ```bash
-python scripts/create_all_data.py
+python scripts/export_metrics.py --csv-path data/logs/cifar10_sam.csv --dataset CIFAR-10 --optimizer SAM
+python scripts/export_metrics.py --csv-path data/logs/cifar10_sgd.csv --dataset CIFAR-10 --optimizer SGD
+python scripts/export_metrics.py --csv-path data/logs/cifar100_sam.csv --dataset CIFAR-100 --optimizer SAM
+python scripts/export_metrics.py --csv-path data/logs/cifar100_sgd.csv --dataset CIFAR-100 --optimizer SGD
 ```
 
-Nếu Python không có trong PATH, thử:
-- `py scripts/create_all_data.py`
-- `python3 scripts/create_all_data.py`
-- Hoặc tìm đường dẫn đầy đủ đến python.exe
+**Lưu ý:** MNIST giữ nguyên dữ liệu hiện tại (train local).
 
 ## Chạy Ứng Dụng
 
 ```bash
 streamlit run app/app.py
 ```
-
-## Cấu Trúc Dữ Liệu
-
-Script sẽ tạo các file sau:
-- `experiments/cifar10/sam/metrics.json` và `predictions.json`
-- `experiments/cifar10/sgd/metrics.json` và `predictions.json`
-- `experiments/cifar100/sam/metrics.json` và `predictions.json`
-- `experiments/cifar100/sgd/metrics.json` và `predictions.json`
-
-Để có loss landscape visualization, cần thêm:
-- `experiments/*/sam/loss_surface.npy`
-- `experiments/*/sgd/loss_surface.npy`
-
-Chạy: `python scripts/generate_sample_data.py` (cần numpy)
 
 
 
