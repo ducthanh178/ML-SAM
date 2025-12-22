@@ -59,12 +59,30 @@ def convert_csv_to_metrics(csv_path: str, dataset: str, optimizer: str, output_d
     
     # Convert sang format JSON
     # Lưu ý: Train_Acc và Test_Acc trong CSV đã là tỷ lệ (0-1), KHÔNG cần chia 100
+    
+    # Tìm epoch có Test_Acc cao nhất (best epoch)
+    best_test_acc = df_agg['Test_Acc'].max()
+    best_epoch_idx = df_agg['Test_Acc'].idxmax()
+    best_epoch = int(df_agg.loc[best_epoch_idx, 'Epoch'])
+    
+    # Lấy tất cả metrics từ best epoch
+    best_train_loss = float(df_agg.loc[best_epoch_idx, 'Train_Loss'])
+    best_train_acc = float(df_agg.loc[best_epoch_idx, 'Train_Acc'])
+    best_val_loss = float(df_agg.loc[best_epoch_idx, 'Test_Loss'])
+    best_val_acc = float(df_agg.loc[best_epoch_idx, 'Test_Acc'])
+    
     metrics = {
         "train_loss": [round(float(x), 4) for x in df_agg['Train_Loss'].tolist()],
         "train_accuracy": [round(float(x), 4) for x in df_agg['Train_Acc'].tolist()],
         "val_loss": [round(float(x), 4) for x in df_agg['Test_Loss'].tolist()],
         "val_accuracy": [round(float(x), 4) for x in df_agg['Test_Acc'].tolist()],
-        "test_accuracy": round(float(df_agg['Test_Acc'].max()), 4),  # Best test accuracy
+        # Best metrics từ cùng epoch có test accuracy cao nhất
+        "test_accuracy": round(best_val_acc, 4),
+        "best_train_accuracy": round(best_train_acc, 4),
+        "best_val_accuracy": round(best_val_acc, 4),
+        "best_train_loss": round(best_train_loss, 4),
+        "best_val_loss": round(best_val_loss, 4),
+        "best_epoch": best_epoch,
         "epochs": int(df_agg['Epoch'].max()) + 1  # Epoch bắt đầu từ 0
     }
     
@@ -89,9 +107,10 @@ def convert_csv_to_metrics(csv_path: str, dataset: str, optimizer: str, output_d
     print(f"   Output JSON: {output_path}")
     print(f"   Dataset: {dataset}, Optimizer: {optimizer}")
     print(f"   Epochs: {metrics['epochs']}")
+    print(f"   Best epoch: {metrics['best_epoch']}")
     print(f"   Best test accuracy: {metrics['test_accuracy']:.4f}")
-    print(f"   Final train accuracy: {metrics['train_accuracy'][-1]:.4f}")
-    print(f"   Final val accuracy: {metrics['val_accuracy'][-1]:.4f}")
+    print(f"   Best train accuracy: {metrics['best_train_accuracy']:.4f}")
+    print(f"   Best val accuracy: {metrics['best_val_accuracy']:.4f}")
     
     return str(output_path)
 

@@ -808,5 +808,10 @@
     0.8209
   ],
   "test_accuracy": 0.8235,
+  "best_train_accuracy": 0.9963,
+  "best_val_accuracy": 0.8235,
+  "best_train_loss": 0.0209,
+  "best_val_loss": 0.6507,
+  "best_epoch": 198,
   "epochs": 200
 }

@@ -7,6 +7,12 @@ from plotly.subplots import make_subplots
 
 def plot_accuracy_comparison(metrics_sgd: dict, metrics_sam: dict):
     """Plot train vs test accuracy comparison for SGD and SAM."""
+    # Sử dụng best metrics từ cùng epoch tốt nhất
+    train_acc_sgd = metrics_sgd.get("best_train_accuracy", metrics_sgd.get("train_accuracy", [0])[-1] if metrics_sgd.get("train_accuracy") else 0)
+    train_acc_sam = metrics_sam.get("best_train_accuracy", metrics_sam.get("train_accuracy", [0])[-1] if metrics_sam.get("train_accuracy") else 0)
+    test_acc_sgd = metrics_sgd.get("test_accuracy", 0)
+    test_acc_sam = metrics_sam.get("test_accuracy", 0)
+    
     fig = make_subplots(
         rows=1, cols=2,
         subplot_titles=("Train Accuracy", "Test Accuracy"),
@@ -18,7 +24,7 @@ def plot_accuracy_comparison(metrics_sgd: dict, metrics_sam: dict):
         go.Bar(
             name="SGD",
             x=["SGD"],
-            y=[metrics_sgd.get("train_accuracy", [0])[-1] if metrics_sgd.get("train_accuracy") else 0],
+            y=[train_acc_sgd],
             marker_color="#FF6B6B",
             showlegend=True
         ),
@@ -29,7 +35,7 @@ def plot_accuracy_comparison(metrics_sgd: dict, metrics_sam: dict):
         go.Bar(
             name="SAM",
             x=["SAM"],
-            y=[metrics_sam.get("train_accuracy", [0])[-1] if metrics_sam.get("train_accuracy") else 0],
+            y=[train_acc_sam],
             marker_color="#4ECDC4",
             showlegend=True
         ),
@@ -41,7 +47,7 @@ def plot_accuracy_comparison(metrics_sgd: dict, metrics_sam: dict):
         go.Bar(
             name="SGD",
             x=["SGD"],
-            y=[metrics_sgd.get("test_accuracy", 0)],
+            y=[test_acc_sgd],
             marker_color="#FF6B6B",
             showlegend=False
         ),
@@ -52,7 +58,7 @@ def plot_accuracy_comparison(metrics_sgd: dict, metrics_sam: dict):
         go.Bar(
             name="SAM",
             x=["SAM"],
-            y=[metrics_sam.get("test_accuracy", 0)],
+            y=[test_acc_sam],
             marker_color="#4ECDC4",
             showlegend=False
         ),
@@ -63,7 +69,7 @@ def plot_accuracy_comparison(metrics_sgd: dict, metrics_sam: dict):
     fig.update_yaxes(title_text="Accuracy", range=[0, 1], row=1, col=2)
     fig.update_layout(
         height=400,
-        title_text="Final Accuracy Comparison: SGD vs SAM",
+        title_text="Best Accuracy Comparison: SGD vs SAM",
         title_x=0.5,
         hovermode="x unified"
     )
@@ -191,9 +197,10 @@ def plot_training_curves(metrics_sgd: dict, metrics_sam: dict):
 
 def plot_generalization_gap(metrics_sgd: dict, metrics_sam: dict):
     """Plot generalization gap (train vs test accuracy)."""
-    train_acc_sgd = metrics_sgd.get("train_accuracy", [0])[-1] if metrics_sgd.get("train_accuracy") else 0
+    # Sử dụng best metrics từ cùng epoch tốt nhất
+    train_acc_sgd = metrics_sgd.get("best_train_accuracy", metrics_sgd.get("train_accuracy", [0])[-1] if metrics_sgd.get("train_accuracy") else 0)
     test_acc_sgd = metrics_sgd.get("test_accuracy", 0)
-    train_acc_sam = metrics_sam.get("train_accuracy", [0])[-1] if metrics_sam.get("train_accuracy") else 0
+    train_acc_sam = metrics_sam.get("best_train_accuracy", metrics_sam.get("train_accuracy", [0])[-1] if metrics_sam.get("train_accuracy") else 0)
     test_acc_sam = metrics_sam.get("test_accuracy", 0)
     
     gap_sgd = train_acc_sgd - test_acc_sgd

@@ -43,9 +43,10 @@ else:
     # Key insights
     col1, col2, col3 = st.columns(3)
     
-    train_acc_sgd = metrics["SGD"].get("train_accuracy", [0])[-1] if metrics["SGD"].get("train_accuracy") else 0
+    # Sử dụng best metrics từ cùng epoch tốt nhất
+    train_acc_sgd = metrics["SGD"].get("best_train_accuracy", metrics["SGD"].get("train_accuracy", [0])[-1] if metrics["SGD"].get("train_accuracy") else 0)
     test_acc_sgd = metrics["SGD"].get("test_accuracy", 0)
-    train_acc_sam = metrics["SAM"].get("train_accuracy", [0])[-1] if metrics["SAM"].get("train_accuracy") else 0
+    train_acc_sam = metrics["SAM"].get("best_train_accuracy", metrics["SAM"].get("train_accuracy", [0])[-1] if metrics["SAM"].get("train_accuracy") else 0)
     test_acc_sam = metrics["SAM"].get("test_accuracy", 0)
     
     gap_sgd = train_acc_sgd - test_acc_sgd
